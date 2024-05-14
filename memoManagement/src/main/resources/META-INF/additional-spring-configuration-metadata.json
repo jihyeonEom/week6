@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "security.jwt.token.expire-length",
+      "type": "java.lang.Long",
+      "description": "Description for security.jwt.token.expire-length."
+    }
+  ]
+}
