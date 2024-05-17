@@ -54,8 +54,7 @@ public class UserService {
     }
 
     // 회원 정보 조회
-    public UserResponseData getUserInfo(UUID userId) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+    public UserResponseData getUserInfo(User user) {
         List<MemoResponseData> memoResponseDataList = new ArrayList<>(); // 유저가 작성한 메모 리스트
         List<UserOrganizationResponseData> userOrganizationResponseDataList = new ArrayList<>(); // 유저가 가입한 org 이름 리스트
 
@@ -79,13 +78,12 @@ public class UserService {
     }
 
     // 유저 탈퇴
-    public void deleteUserByUserId(UUID userId) {
-        this.userRepository.deleteById(userId);
+    public void deleteUser(User user) {
+        this.userRepository.delete(user);
     }
 
     // 유저 정보 업데이트
-    public void updateUserByUserId(UserUpdateDto userUpdateDto, UUID userId) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+    public void updateUser(UserUpdateDto userUpdateDto, User user) {
         user.updateUser(userUpdateDto);
         this.userRepository.save(user);
     }

@@ -19,7 +19,7 @@ public class Organization extends BaseEntity {
     @Column(length = 100, nullable = false)// 길이는 100자 이하이고, 비어있을 수 없다.
     private String name;
 
-    @OneToMany(mappedBy = "organization", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "organization", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<UserOrganization> userOrganizations;
 
     public void updateOrganization(OrganizationUpdateDto organizationUpdateDto) {

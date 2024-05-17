@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 @Entity(name = "UserOrganization")
 public class UserOrganization extends BaseEntity {
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Organization organization;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private User user;
 
 }

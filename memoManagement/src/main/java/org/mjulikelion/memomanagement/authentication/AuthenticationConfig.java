@@ -20,16 +20,15 @@ public class AuthenticationConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor)
+                .addPathPatterns("/users/info")
                 .addPathPatterns("/users/leave")
                 .addPathPatterns("/users/update")
-                .addPathPatterns("/users/info")
+                .addPathPatterns("/organizations/join/{orgId}")
+                .addPathPatterns("/organizations/leave/{orgId}")
                 .addPathPatterns("/memos")
-                .addPathPatterns("/memos/userId")
-                .addPathPatterns("/memos/likes/add")
-                .addPathPatterns("/memos/remove")
-                .addPathPatterns("/memos/update")
-                .addPathPatterns("/organizations/join")
-                .addPathPatterns("/organizations/leave");
+                .addPathPatterns("/memos/remove/{memoId}")
+                .addPathPatterns("/memos/update/{memoId}")
+                .addPathPatterns("/memos/likes/add/{memoId}");
     }
 
     @Override

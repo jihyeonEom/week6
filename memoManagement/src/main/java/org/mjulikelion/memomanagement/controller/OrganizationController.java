@@ -29,16 +29,16 @@ public class OrganizationController {
     }
 
     // org 삭제
-    @DeleteMapping("/organizations/remove")
-    public ResponseEntity<ResponseDto<Void>> deleteOrganizationById(@RequestHeader("orgId") UUID orgId) {
+    @DeleteMapping("/organizations/{orgId}")
+    public ResponseEntity<ResponseDto<Void>> deleteOrganizationById(@PathVariable("orgId") UUID orgId) {
         this.organizationService.validateOrganization(orgId);
         this.organizationService.deleteOrganizationById(orgId);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "delete organization"), HttpStatus.OK);
     }
 
     // org 이름 변경
-    @PatchMapping("/organizations/update")
-    public ResponseEntity<ResponseDto<Void>> updateOrganizationById(@RequestHeader("orgId") UUID orgId,
+    @PatchMapping("/organizations/{orgId}")
+    public ResponseEntity<ResponseDto<Void>> updateOrganizationById(@PathVariable("orgId") UUID orgId,
                                                                     @RequestBody @Valid OrganizationUpdateDto organizationUpdateDto) {
         this.organizationService.validateOrganization(orgId);
         this.organizationService.updateOrganizationById(orgId, organizationUpdateDto);
@@ -46,21 +46,21 @@ public class OrganizationController {
     }
 
     // user의 org 가입
-    @PostMapping("/organizations/join")
-    public ResponseEntity<ResponseDto<Void>> joinOrganization(@RequestHeader("orgId") UUID orgId, @AuthenticatedUser User user) {
+    @PostMapping("/organizations/join/{orgId}")
+    public ResponseEntity<ResponseDto<Void>> joinOrganization(@PathVariable("orgId") UUID orgId, @AuthenticatedUser User user) {
         this.organizationService.validateOrganization(orgId);
-        this.organizationService.isUserAlreadyjoinedOrganization(orgId, user); // 유저가 이미 가입한 조직인지 검사
+        this.organizationService.isUserAlreadyJoinedOrganization(orgId, user); // 유저가 이미 가입한 조직인지 검사
 
-        this.organizationService.joinOrganization(user.getId(), orgId);
+        this.organizationService.joinOrganization(user, orgId);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "join organization"), HttpStatus.OK);
     }
 
     // user의 org 탈퇴
-    @DeleteMapping("/organizations/leave")
-    public ResponseEntity<ResponseDto<Void>> leaveOrganization(@RequestHeader("orgId") UUID orgId, @AuthenticatedUser User user) {
+    @DeleteMapping("/organizations/leave/{orgId}")
+    public ResponseEntity<ResponseDto<Void>> leaveOrganization(@PathVariable("orgId") UUID orgId, @AuthenticatedUser User user) {
         this.organizationService.validateOrganization(orgId);
 
-        this.organizationService.leaveOrganization(orgId, user.getId());
+        this.organizationService.leaveOrganization(user, orgId);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "leave organization"), HttpStatus.OK);
     }
 }

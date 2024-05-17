@@ -10,7 +10,6 @@ public class AuthenticationExtractor {
     private static final String TOKEN_COOKIE_NAME = "AccessToken";
 
     public static String extractTokenFromRequest(final HttpServletRequest request) {
-        System.out.println("in extract token from request!!!");
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {

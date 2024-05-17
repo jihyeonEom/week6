@@ -14,7 +14,6 @@ import org.mjulikelion.memomanagement.model.MemoLikes;
 import org.mjulikelion.memomanagement.model.User;
 import org.mjulikelion.memomanagement.repository.MemoLikesRepository;
 import org.mjulikelion.memomanagement.repository.MemoRepository;
-import org.mjulikelion.memomanagement.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,12 +25,10 @@ import java.util.UUID;
 public class MemoService {
 
     private final MemoRepository memoRepository;
-    private final UserRepository userRepository;
     private final MemoLikesRepository memoLikesRepository;
 
     // 메모 작성하기
-    public void createMemo(MemoCreateDto memoCreateDto, UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+    public void createMemo(MemoCreateDto memoCreateDto, User user) {
         List<MemoLikes> memoLikes = new ArrayList<>(); // 빈 좋아요 리스트 생성
         Memo memo = Memo.builder()
                 .title(memoCreateDto.getTitle())
@@ -44,8 +41,7 @@ public class MemoService {
     }
 
     // 유저가 작성한 모든 메모 조회하기
-    public MemoListResponseData getAllMemoByUserId(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+    public MemoListResponseData getAllMemo(User user) {
         List<Memo> memos = user.getMemos();
         List<MemoResponseData> memoListResponseData = new ArrayList<>();
 
@@ -68,9 +64,8 @@ public class MemoService {
     }
 
     // 메모에 좋아요 누르기
-    public void addLikeByMemoId(UUID userId, UUID memoId) {
+    public void addLikeByMemoId(User user, UUID memoId) {
         Memo memo = this.memoRepository.findById(memoId).orElseThrow(() -> new NotFoundException(ErrorCode.MEMO_NOT_FOUND));
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
         MemoLikes memoLikes = new MemoLikes(memo, user);
 
@@ -122,8 +117,7 @@ public class MemoService {
     }
 
     // 유저가 해당 메모에 접근할 권한이 있는지 검사
-    public void isUserHaveAccessTo(UUID userId, UUID memoId) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+    public void isUserHaveAccessTo(User user, UUID memoId) {
         for (Memo memo : user.getMemos()) {
             if (memo.getId().equals(memoId)) {
                 return;

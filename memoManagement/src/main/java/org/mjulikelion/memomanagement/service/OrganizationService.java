@@ -46,16 +46,15 @@ public class OrganizationService {
     }
 
     // user의 org 가입
-    public void joinOrganization(UUID userId, UUID orgId) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+    public void joinOrganization(User user, UUID orgId) {
         Organization organization = this.organizationRepository.findById(orgId).orElseThrow(() -> new NotFoundException(ErrorCode.ORGANIZATION_NOT_FOUND));
         UserOrganization userOrganization = new UserOrganization(organization, user);
         this.userOrganizationRepository.save(userOrganization);
     }
 
     // user의 org 탈퇴
-    public void leaveOrganization(UUID orgId, UUID userId) {
-        UUID userOrgId = this.isUserInOrganization(orgId, userId);
+    public void leaveOrganization(User user, UUID orgId) {
+        UUID userOrgId = this.isUserInOrganization(orgId, user);
         this.userOrganizationRepository.deleteById(userOrgId);
 
     }
@@ -68,14 +67,13 @@ public class OrganizationService {
 
     // user가 해당 org에 속해있는지 확인
     // 있으면 UserOrganiztion의 Id를 반환
-    public UUID isUserInOrganization(UUID orgId, UUID userId) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+    public UUID isUserInOrganization(UUID orgId, User user) {
         List<UserOrganization> userOrganizations = user.getUserOrganizations();
 
         for (UserOrganization userOrg : userOrganizations) {
 
             if (userOrg.getOrganization().getId().equals(orgId)) {
-                if (userOrg.getUser().getId().equals(userId)) {
+                if (userOrg.getUser().getId().equals(user.getId())) {
                     return userOrg.getId();
                 }
                 throw new NotFoundException(ErrorCode.USER_ORGANIZATION_NOT_FOUND);
@@ -84,13 +82,12 @@ public class OrganizationService {
         throw new NotFoundException(ErrorCode.USER_ORGANIZATION_NOT_FOUND);
     }
 
-    public boolean isUserAlreadyjoinedOrganization(UUID orgId, User user) {
+    public void isUserAlreadyJoinedOrganization(UUID orgId, User user) {
         List<UserOrganization> userOrganizations = user.getUserOrganizations();
         for (UserOrganization userOrg : userOrganizations) {
             if (userOrg.getOrganization().getId().equals(orgId)) {
                 throw new ConflictException(ErrorCode.USER_ORGANIZATION_ALREADY_EXISTS);
             }
         }
-        return true;
     }
 }

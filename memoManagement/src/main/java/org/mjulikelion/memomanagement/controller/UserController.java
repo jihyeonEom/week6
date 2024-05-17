@@ -37,14 +37,13 @@ public class UserController {
     // 내 정보 조회하기
     @GetMapping("/users/info")
     public ResponseEntity<ResponseDto<UserResponseData>> getUserInfo(@AuthenticatedUser User user) {
-        System.out.println("users info Controller!!!");
-        UserResponseData userResponseData = this.userService.getUserInfo(user.getId());
+        UserResponseData userResponseData = this.userService.getUserInfo(user);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "user info", userResponseData), HttpStatus.OK);
     }
 
     // 로그인
     @GetMapping("/users/login")
-    public ResponseEntity<ResponseDto<Void>> getUser(@RequestHeader("userId") UUID userId, HttpServletResponse response) {
+    public ResponseEntity<ResponseDto<Void>> login(@RequestHeader("userId") UUID userId, HttpServletResponse response) {
         this.userService.validateUserById(userId); // 유저 검증
 
         String payload = userId.toString();
@@ -58,17 +57,17 @@ public class UserController {
     }
 
     // 회원 탈퇴
-    @DeleteMapping("/users/leave")
-    public ResponseEntity<ResponseDto<Void>> deleteUserByUserId(@AuthenticatedUser User user) {
-        this.userService.deleteUserByUserId(user.getId());
+    @DeleteMapping("/users")
+    public ResponseEntity<ResponseDto<Void>> deleteUser(@AuthenticatedUser User user) {
+        this.userService.deleteUser(user);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "delete user"), HttpStatus.OK);
     }
 
     // 회원 정보 수정
-    @PatchMapping("/users/update")
-    public ResponseEntity<ResponseDto<Void>> updateMemoByMemoId(@RequestBody @Valid UserUpdateDto userUpdateDto,
-                                                                @AuthenticatedUser User user) {
-        this.userService.updateUserByUserId(userUpdateDto, user.getId());
+    @PatchMapping("/users")
+    public ResponseEntity<ResponseDto<Void>> updateUser(@RequestBody @Valid UserUpdateDto userUpdateDto,
+                                                        @AuthenticatedUser User user) {
+        this.userService.updateUser(userUpdateDto, user);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "update user"), HttpStatus.OK);
     }
 
