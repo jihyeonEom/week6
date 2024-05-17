@@ -26,9 +26,7 @@ public class AuthenticationConfig implements WebMvcConfigurer {
                 .addPathPatterns("/organizations/join/{orgId}")
                 .addPathPatterns("/organizations/leave/{orgId}")
                 .addPathPatterns("/memos")
-                .addPathPatterns("/memos/remove/{memoId}")
-                .addPathPatterns("/memos/update/{memoId}")
-                .addPathPatterns("/memos/likes/add/{memoId}");
+                .addPathPatterns("/memos/**");
     }
 
     @Override

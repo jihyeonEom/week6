@@ -48,7 +48,7 @@ public class MemoController {
     }
 
     // 메모에 좋아요를 누르는 기능
-    @PostMapping("/memos/likes/add/{memoId}")
+    @PostMapping("/memos/likes/{memoId}")
     public ResponseEntity<ResponseDto<MemoResponseData>> addLikeByMemoId(@PathVariable("memoId") UUID memoId, @AuthenticatedUser User user) {
         this.memoService.validateMemoById(memoId);
         this.memoService.addLikeByMemoId(user, memoId);
@@ -65,7 +65,7 @@ public class MemoController {
     }
 
     // 해당 유저가 작성한 메모를 메모 아이디를 통해 삭제
-    @DeleteMapping("/memos/remove/{memoId}")
+    @DeleteMapping("/memos/{memoId}")
     public ResponseEntity<ResponseDto<Void>> deleteMemoByMemoId(@PathVariable("memoId") UUID memoId, @AuthenticatedUser User user) {
         this.memoService.validateMemoById(memoId);
         this.memoService.isUserHaveAccessTo(user, memoId);
@@ -76,7 +76,7 @@ public class MemoController {
     }
 
     // 해당 유저가 작성한 메모를 메모 아이디를 통해 수정
-    @PatchMapping("/memos/update/{memoId}")
+    @PatchMapping("/memos/{memoId}")
     public ResponseEntity<ResponseDto<Void>> updateMemoByMemoId(@PathVariable("memoId") UUID memoId, @RequestBody @Valid MemoUpdateDto memoUpdateDto,
                                                                 @AuthenticatedUser User user) {
         this.memoService.validateMemoById(memoId);
